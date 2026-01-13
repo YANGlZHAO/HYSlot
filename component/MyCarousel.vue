@@ -1,14 +1,12 @@
 <template>
-	<view class="my-carousel">
+	<view class="my-carousel" :style="{ height: swiperHeight }">
 		<u-swiper :list="formattedImages" keyName="imageUrl" :autoplay="true" :circular="true" :indicator="true"
-			indicatorMode="dot" :height="swiperHeight" radius="1rem" mode="widthFix" bgColor="transparent"
-			@click="handleSwiperClick"></u-swiper>
+			indicatorMode="dot" :height="swiperHeight" radius="1rem" bgColor="transparent" mode="none"
+			@click="handleSwiperClick" />
 	</view>
 </template>
 
 <script>
-	import setting from "@/common/config.js";
-
 	export default {
 		props: {
 			images: {
@@ -18,28 +16,30 @@
 		},
 		data() {
 			return {
-				swiperHeight: 0,
-				devUrl: setting.CURRENT_ENVIRONMENT
+				swiperHeight: "0px"
 			};
 		},
 		computed: {
 			formattedImages() {
-				return this.images.map(item => ({
-					...item,
-					imageUrl: this.devUrl + "/api/" + item.imageUrl
+				return this.images.map(i => ({
+					...i,
+					imageUrl: i.imageUrl || ""
 				}));
 			}
 		},
 		mounted() {
 			this.calcHeight();
-			uni.onWindowResize(() => this.calcHeight());
+			uni.onWindowResize(this.calcHeight);
 		},
 		methods: {
 			calcHeight() {
-				const screenWidth = uni.getSystemInfoSync().windowWidth - 20;
-				const aspectRatio = 1020 / 300;
-				this.swiperHeight = screenWidth / aspectRatio + "px";
+				const screenWidth = uni.getSystemInfoSync().windowWidth;
+				const ratio = 1200 / 480;
+
+				const h = screenWidth / ratio;
+				this.swiperHeight = Math.min(h, 480) + "px";
 			},
+
 			handleSwiperClick(index) {
 				const url = this.formattedImages[index]?.link;
 				if (url) {
@@ -54,14 +54,20 @@
 
 <style scoped>
 	.my-carousel {
-		width: calc(100% - 1rem);
-		margin: 0.5rem auto;
+		width: calc(100% - 6px);
+		padding: 3px 0;
+		margin: auto;
 		overflow: hidden;
 	}
 
-	/deep/ .u-swiper__item__image {
+	/* 关键裁剪样式 */
+	::v-deep .u-swiper__item {
+		height: 100%;
+	}
+
+	::v-deep .u-swiper__item__image {
 		width: 100% !important;
-		height: auto !important;
-		object-fit: contain !important;
+		height: 100% !important;
+		object-fit: cover !important;
 	}
 </style>

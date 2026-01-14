@@ -19,6 +19,9 @@ import globalConfig from './common/global.js'
 
 Vue.prototype.$config = globalConfig
 
+import 'bootstrap-icons/font/bootstrap-icons.css'
+
+
 
 // 获取刘海和底部横条高度
 const systemInfo = uni.getSystemInfoSync()

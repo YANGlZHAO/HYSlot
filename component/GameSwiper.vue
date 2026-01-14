@@ -1,6 +1,17 @@
 <template>
 	<div class="game-swiper-container">
-		<div class="game-swiper-title">HOT GAME</div>
+		<!-- <div class="game-swiper-title">HOT GAME</div> -->
+
+
+		<div class="header-inner">
+			<img src="/static/textImg_hot_game.png" class="text_Img_hot_game" />
+			<view v-if="gameList.length > 1" class="bi-chevron">
+				<i class="bi bi-chevron-left"
+					:class="currentIndex !== 0 ? 'bi-chevron-Highlight' : 'bi-chevron-lowDark'"></i>
+				<i class="bi bi-chevron-right"
+					:class="currentIndex !== gameList.length - 1 ? 'bi-chevron-Highlight' : 'bi-chevron-lowDark'"></i>
+			</view>
+		</div>
 
 		<swiper :indicator-dots="false" :autoplay="false" :circular="false" :current="currentIndex"
 			:previous-margin="'1.25rem'" :next-margin="'1.25rem'" class="game-swiper" @change="onSwiperChange">
@@ -62,6 +73,33 @@
 		box-shadow: 0 0.1rem 0.75rem rgba(0, 0, 0, 0.05);
 	}
 
+	.header-inner {
+		padding: 0.2rem 1rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.text_Img_hot_game {
+		width: 5rem;
+	}
+
+	.bi-chevron {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+	}
+
+	.bi-chevron-Highlight {
+		font-size: 1rem;
+		color: #ecd370;
+	}
+
+	.bi-chevron-lowDark {
+		font-size: 1rem;
+		color: #9b9b9b;
+	}
+
 	.game-swiper-title {
 		font-size: 1rem;
 		font-weight: 700;
@@ -106,6 +144,7 @@
 		opacity: 0.7;
 		cursor: pointer;
 		overflow: hidden;
+		max-width: 22rem;
 	}
 
 	.game-item.active {
@@ -129,7 +168,7 @@
 		justify-content: center;
 		align-items: center;
 		/* 补充图片容器高度，避免塌陷 */
-		height: 10rem;
+		/* height: 10rem; */
 		padding: 0.5rem 0;
 	}
 

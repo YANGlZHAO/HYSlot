@@ -30,32 +30,7 @@
 		<div class="page-content" :style="{ marginTop: bannerHeight + 'px' }">
 			<!-- 2. 底部主导航 -->
 			<TopNavBar v-model="activeIndex" :list="navList" @change="onNavChange" />
-
-			<!-- 3. Hot Game（大卡轮播） -->
-			<section class="hot-game">
-				<div class="section-header">
-					<span>HOT GAME</span>
-					<div class="arrow">
-						<i>&lt;</i>
-						<i>&gt;</i>
-					</div>
-				</div>
-
-				<div class="hot-banner">
-					<img src="/static/logo.png" alt="hot" />
-					<div class="hot-info">
-						<h3>IRON MAN</h3>
-						<p>HY SOFT has just launched their very first...</p>
-						<button>View</button>
-					</div>
-				</div>
-				
-				<GameSwiper :gameList="hotGames" />
-				
-				
-
-
-			</section>
+			<GameSwiper :gameList="hotGames" />
 
 			<!-- 4. Hot Game（卡片区） -->
 			<section class="hot-cards">
@@ -243,43 +218,42 @@
 						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg'
 					}
 				],
-				hotGames: [
-				        {
-				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/65/home_banner_en@3x-3f8420fc.png',
-				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/65/app_icon_small@3x-2014dac2.png',
-				          name: 'Mahjong Ways',
-				          desc: 'PG SOFT has just launched their very...'
-				        },
-				        {
-				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/104/HB-54478fa6.png',
-				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/104/app_icon_small@3x-f4729b69.png',
-				          name: 'Wild Bandito',
-				          desc: 'Águila which means "The Eagle" is a...'
-				        },
-						{
-						  image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/105/HB-8760bae1.png',
-						  icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/105/app_icon_small@3x-c9e53079.png',
-						  name: 'Wild Bandito',
-						  desc: 'Águila which means "The Eagle" is a...'
-						},
-						{
-						  image: '	https://public.pg-demo.com/pages/static/image/en/Home_Banner/100/HB-47d19889.png',
-						  icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/100/app_icon_small@3x-0fef06a8.png',
-						  name: 'Wild Bandito',
-						  desc: 'Águila which means "The Eagle" is a...'
-						},{
-				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/60/home_banner_en@3x-2416740c.png',
-				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/60/app_icon_small@3x-8a19a680.png',
-				          name: 'Mahjong Ways',
-				          desc: 'PG SOFT has just launched their very...'
-				        },
-				        {
-				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/54/home_banner_en@3x-434227b0.png',
-				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/54/app_icon_small@3x-9930716d.png',
-				          name: 'Wild Bandito',
-				          desc: 'Águila which means "The Eagle" is a...'
-				        }
-				      ]
+				hotGames: [{
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/65/home_banner_en@3x-3f8420fc.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/65/app_icon_small@3x-2014dac2.png',
+						name: 'Mahjong Ways',
+						desc: 'PG SOFT has just launched their very...'
+					},
+					{
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/104/HB-54478fa6.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/104/app_icon_small@3x-f4729b69.png',
+						name: 'Wild Bandito',
+						desc: 'Águila which means "The Eagle" is a...'
+					},
+					{
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/105/HB-8760bae1.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/105/app_icon_small@3x-c9e53079.png',
+						name: 'Wild Bandito',
+						desc: 'Águila which means "The Eagle" is a...'
+					},
+					{
+						image: '	https://public.pg-demo.com/pages/static/image/en/Home_Banner/100/HB-47d19889.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/100/app_icon_small@3x-0fef06a8.png',
+						name: 'Wild Bandito',
+						desc: 'Águila which means "The Eagle" is a...'
+					}, {
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/60/home_banner_en@3x-2416740c.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/60/app_icon_small@3x-8a19a680.png',
+						name: 'Mahjong Ways',
+						desc: 'PG SOFT has just launched their very...'
+					},
+					{
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/54/home_banner_en@3x-434227b0.png',
+						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/54/app_icon_small@3x-9930716d.png',
+						name: 'Wild Bandito',
+						desc: 'Águila which means "The Eagle" is a...'
+					}
+				]
 			}
 		},
 		mounted() {

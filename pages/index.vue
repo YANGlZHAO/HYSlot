@@ -15,9 +15,6 @@
 						@select="onSelectItem" />
 				</div>
 			</div>
-
-
-
 			<div class="top-header small" :class="{ show: showSmallHeader }">
 				<div class="header-inner">
 					<img class="left-img" src="https://www.pgsoft.com/_nuxt/img/nav_common_logo_white@2x.0a1ef47.png" />
@@ -52,6 +49,10 @@
 						<button>View</button>
 					</div>
 				</div>
+				
+				<GameSwiper :gameList="hotGames" />
+				
+				
 
 
 			</section>
@@ -119,6 +120,7 @@
 	import MyCarousel from "@/component/MyCarousel.vue"
 	import AnimatedDropdown from "@/component/AnimatedDropdown.vue"
 	import TopNavBar from "@/component/TopNavBar.vue";
+	import GameSwiper from '../component/GameSwiper.vue'
 	import {
 		getFcSwiperList,
 		getFcPGList,
@@ -136,7 +138,8 @@
 			NavBarVue,
 			MyCarousel,
 			AnimatedDropdown,
-			TopNavBar
+			TopNavBar,
+			GameSwiper
 		},
 		data() {
 			return {
@@ -239,7 +242,44 @@
 						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg',
 						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg'
 					}
-				]
+				],
+				hotGames: [
+				        {
+				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/65/home_banner_en@3x-3f8420fc.png',
+				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/65/app_icon_small@3x-2014dac2.png',
+				          name: 'Mahjong Ways',
+				          desc: 'PG SOFT has just launched their very...'
+				        },
+				        {
+				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/104/HB-54478fa6.png',
+				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/104/app_icon_small@3x-f4729b69.png',
+				          name: 'Wild Bandito',
+				          desc: 'Águila which means "The Eagle" is a...'
+				        },
+						{
+						  image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/105/HB-8760bae1.png',
+						  icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/105/app_icon_small@3x-c9e53079.png',
+						  name: 'Wild Bandito',
+						  desc: 'Águila which means "The Eagle" is a...'
+						},
+						{
+						  image: '	https://public.pg-demo.com/pages/static/image/en/Home_Banner/100/HB-47d19889.png',
+						  icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/100/app_icon_small@3x-0fef06a8.png',
+						  name: 'Wild Bandito',
+						  desc: 'Águila which means "The Eagle" is a...'
+						},{
+				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/60/home_banner_en@3x-2416740c.png',
+				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/60/app_icon_small@3x-8a19a680.png',
+				          name: 'Mahjong Ways',
+				          desc: 'PG SOFT has just launched their very...'
+				        },
+				        {
+				          image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/54/home_banner_en@3x-434227b0.png',
+				          icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/54/app_icon_small@3x-9930716d.png',
+				          name: 'Wild Bandito',
+				          desc: 'Águila which means "The Eagle" is a...'
+				        }
+				      ]
 			}
 		},
 		mounted() {

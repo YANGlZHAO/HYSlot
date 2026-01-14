@@ -32,12 +32,7 @@
 
 		<div class="page-content" :style="{ marginTop: bannerHeight + 'px' }">
 			<!-- 2. 底部主导航 -->
-			<nav class="main-nav">
-				<div class="nav-item active">Games Home</div>
-				<div class="nav-item">Timeline</div>
-				<div class="nav-item">All Games</div>
-				<div class="nav-item">Search</div>
-			</nav>
+			<TopNavBar v-model="activeIndex" :list="navList" @change="onNavChange" />
 
 			<!-- 3. Hot Game（大卡轮播） -->
 			<section class="hot-game">
@@ -57,8 +52,8 @@
 						<button>View</button>
 					</div>
 				</div>
-				
-				
+
+
 			</section>
 
 			<!-- 4. Hot Game（卡片区） -->
@@ -123,6 +118,7 @@
 	import NavBarVue from '@/component/NavBar.vue'
 	import MyCarousel from "@/component/MyCarousel.vue"
 	import AnimatedDropdown from "@/component/AnimatedDropdown.vue"
+	import TopNavBar from "@/component/TopNavBar.vue";
 	import {
 		getFcSwiperList,
 		getFcPGList,
@@ -139,7 +135,8 @@
 		components: {
 			NavBarVue,
 			MyCarousel,
-			AnimatedDropdown
+			AnimatedDropdown,
+			TopNavBar
 		},
 		data() {
 			return {
@@ -220,7 +217,29 @@
 						label: "视频"
 					}
 				],
-				selectedValue: null
+				selectedValue: null,
+				activeIndex: 0,
+				navList: [{
+						label: 'GAMES HOME',
+						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_HomePage.facb932.svg',
+						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_HomePage.facb932.svg'
+					},
+					{
+						label: 'TIMELINE',
+						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_TimeLinePage.5d075c0.svg',
+						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_TimeLinePage.5d075c0.svg'
+					},
+					{
+						label: 'ALL GAMES',
+						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_AllGame.a302cd6.svg',
+						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_AllGame.a302cd6.svg'
+					},
+					{
+						label: 'SEARCH',
+						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg',
+						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg'
+					}
+				]
 			}
 		},
 		mounted() {
@@ -356,6 +375,10 @@
 						isStarred: false
 					};
 				});
+			},
+
+			onNavChange(item, index) {
+				console.log(item, index);
 			}
 
 		}

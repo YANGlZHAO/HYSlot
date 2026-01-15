@@ -40,7 +40,6 @@
 
 <script>
 	export default {
-		name: "GameSwiper",
 		props: {
 			gameList: {
 				type: Array,
@@ -68,7 +67,7 @@
 
 <style scoped>
 	.game-swiper-container {
-		padding: 0.5rem;
+		/* padding: 0.5rem; */
 		border-radius: 1rem;
 		box-shadow: 0 0.1rem 0.75rem rgba(0, 0, 0, 0.05);
 	}
@@ -109,7 +108,7 @@
 	}
 
 	.game-swiper {
-		height: 15rem;
+		height: 14.5rem;
 	}
 
 	/* 核心修改：调整uni-swiper-slides的inset值 */

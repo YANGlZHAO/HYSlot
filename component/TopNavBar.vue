@@ -4,9 +4,10 @@
 			<div class="nav-item" v-for="(item, index) in list" :key="index" :class="{ active: index === currentIndex }"
 				@click="handleClick(index, item)" ref="navItem">
 				<!-- 图标 -->
-				<div class="nav-icon" v-if="item.icon">
+				<!-- <div class="nav-icon" v-if="item.icon">
 					<img :src="currentIndex === index ? item.activeIcon : item.icon" alt="icon" />
-				</div>
+				</div> -->
+				<i :class="item.icon"></i>
 
 				<!-- 文本 -->
 				<div class="nav-label">{{ item.label }}</div>

@@ -30,19 +30,9 @@
 		<div class="page-content" :style="{ marginTop: bannerHeight + 'px' }">
 			<!-- 2. 底部主导航 -->
 			<TopNavBar v-model="activeIndex" :list="navList" @change="onNavChange" />
-			<GameSwiper :gameList="hotGames" />
+			<HotGame :gameList="hotGames" />
+			<HottestCategory :HottestCategoryList="HottestCategoryList"/>
 
-			<!-- 4. Hot Game（卡片区） -->
-			<section class="hot-cards">
-				<div class="card music-card">
-					<h4>Music</h4>
-					<p>Music makes everything better</p>
-				</div>
-
-				<div class="card game-card" v-for="i in 5" :key="i">
-					<img src="/static/logo.png" alt="game" />
-				</div>
-			</section>
 
 			<!-- 5. Hottest Category -->
 			<section class="category">
@@ -94,8 +84,9 @@
 	import NavBarVue from '@/component/NavBar.vue'
 	import MyCarousel from "@/component/MyCarousel.vue"
 	import AnimatedDropdown from "@/component/AnimatedDropdown.vue"
-	import TopNavBar from "@/component/TopNavBar.vue";
-	import GameSwiper from '../component/GameSwiper.vue'
+	import TopNavBar from "@/component/TopNavBar.vue"
+	import HotGame from '../component/HotGame.vue'
+	import HottestCategory from "../component/HottestCategory.vue";
 	import {
 		getFcSwiperList,
 		getFcPGList,
@@ -114,7 +105,8 @@
 			MyCarousel,
 			AnimatedDropdown,
 			TopNavBar,
-			GameSwiper
+			HotGame,
+			HottestCategory
 		},
 		data() {
 			return {
@@ -199,23 +191,23 @@
 				activeIndex: 0,
 				navList: [{
 						label: 'GAMES HOME',
-						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_HomePage.facb932.svg',
-						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_HomePage.facb932.svg'
+						icon: 'bi bi-house',
+						activeIcon: 'bi bi-house'
 					},
 					{
 						label: 'TIMELINE',
-						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_TimeLinePage.5d075c0.svg',
-						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_TimeLinePage.5d075c0.svg'
+						icon: 'bi bi-clock-history',
+						activeIcon: 'bi bi-clock-history'
 					},
 					{
 						label: 'ALL GAMES',
-						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_AllGame.a302cd6.svg',
-						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_AllGame.a302cd6.svg'
+						icon: 'bi bi-grid',
+						activeIcon: 'bi bi-grid'
 					},
 					{
 						label: 'SEARCH',
-						icon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg',
-						activeIcon: 'https://www.pgsoft.com/_nuxt/img/Icon20_Search.21bc271.svg'
+						icon: 'bi bi-search',
+						activeIcon: 'bi bi-search'
 					}
 				],
 				hotGames: [{
@@ -237,7 +229,7 @@
 						desc: 'Águila which means "The Eagle" is a...'
 					},
 					{
-						image: '	https://public.pg-demo.com/pages/static/image/en/Home_Banner/100/HB-47d19889.png',
+						image: 'https://public.pg-demo.com/pages/static/image/en/Home_Banner/100/HB-47d19889.png',
 						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/100/app_icon_small@3x-0fef06a8.png',
 						name: 'Wild Bandito',
 						desc: 'Águila which means "The Eagle" is a...'
@@ -253,6 +245,44 @@
 						name: 'Wild Bandito',
 						desc: 'Águila which means "The Eagle" is a...'
 					}
+				],
+				HottestCategoryList: [{
+						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+						title: "Music",
+						desc: "Music makes everything better, and these games will grove to it!",
+						image1: "https://public.pg-demo.com/ages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						bigImg: "	https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+					},{
+						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+						title: "Music",
+						desc: "Music makes everything better, and these games will grove to it!",
+						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						bigImg: "	https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+					},{
+						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+						title: "Music",
+						desc: "Music makes everything better, and these games will grove to it!",
+						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						bigImg: "	https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+					},{
+						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+						title: "Music",
+						desc: "Music makes everything better, and these games will grove to it!",
+						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+						bigImg: "	https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+					},
 				]
 			}
 		},

@@ -1,7 +1,8 @@
 <template>
 	<div class="game-swiper-container">
 		<div class="header-inner">
-			<img :src="headerImgSrc" class="text_Img_Hottest_Category" @error="handleHeaderImgError" />
+			<img :src="headerImgSrc" class="text_Img_Hottest_Category"
+				@error="handleHeaderImageError('headerImgSrc', 'default')" />
 			<view v-if="FeaturedGameList.length > 1" class="bi-chevron">
 				<i class="bi bi-chevron-left"
 					:class="currentIndex !== 0 ? 'bi-chevron-Highlight' : 'bi-chevron-lowDark'"></i>
@@ -10,41 +11,30 @@
 			</view>
 		</div>
 		<div class="card-container">
-			<!-- 卡片列表：移除弹性拉伸，固定宽度 -->
-			<div class="card-item" v-for="(item, index) in cardList" :key="index">
+			<div class="card-item" v-for="(item, index) in FeaturedGameList" :key="index">
 				<div class="card-img-wrapper">
-					<img :src="item.image" class="card-img" @error="() => item.image = defaultImages.small" loading="lazy">
+					<img :src="item.image" class="card-img"
+						@error="handleImageError(FeaturedGameList, index, 'image', 'small')" loading="lazy">
 				</div>
 				<p class="card-title">{{ item.title }}</p>
 			</div>
 		</div>
-		<!-- 加载更多按钮 -->
 		<button class="load-more-btn" @click="loadMore" :disabled="isLoading || !hasMoreData">
-			{{ isLoading ? 'Loading...' : hasMoreData ? 'Load More' : 'No More Data' }}
+			<!-- 文字 + 箭头图标 -->
+			<span>{{ isLoading ? 'Loading...' : hasMoreData ? 'Load More' : 'No More Data' }}</span>
+			<!-- 仅在“Load More”状态显示箭头（修正i标签语法） -->
+			<i class="arrow-icon" v-if="!isLoading && hasMoreData"></i>
 		</button>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: {
-			FeaturedGameList: {
-				type: Array,
-				required: true,
-			},
-		},
 		data() {
 			return {
 				currentIndex: 0,
-				defaultImages: {
-					default: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png',
-					small: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png',
-					big: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png'
-				},
 				headerImgSrc: '/static/textImg_Hottest_Category.png',
-				errorImgMap: {},
-				imgStatusMap: {},
-				cardList: [{
+				FeaturedGameList: [{
 						image: "./static/icons/1.png",
 						title: "FOUTURE MOUSE"
 					},
@@ -127,16 +117,12 @@
 				pageSize: 3
 			};
 		},
+		mounted() {
+			this.initInvalidImages(this.FeaturedGameList, {
+				image: 'big'
+			});
+		},
 		methods: {
-			onSwiperChange(e) {
-				this.currentIndex = e.detail.current;
-			},
-			handleItemClick(item) {
-				this.$emit('item-click', item);
-			},
-			handleCardClick(cardType) {
-				this.$emit("card-click", cardType);
-			},
 			loadMore() {
 				if (this.isLoading || !this.hasMoreData) return;
 				this.isLoading = true;
@@ -145,33 +131,17 @@
 					const end = start + this.pageSize;
 					const newData = this.moreData.slice(start, end);
 					if (newData.length > 0) {
-						this.cardList = [...this.cardList, ...newData];
+						this.FeaturedGameList = [...this.FeaturedGameList, ...newData];
+						// 对新加载的数据也做无效图片检查
+						this.initInvalidImages(newData, {
+							image: 'small'
+						});
 						this.page += 1;
 					} else {
 						this.hasMoreData = false;
 					}
 					this.isLoading = false;
 				}, 800);
-			},
-			getImgUrl(index, key) {
-				if (this.errorImgMap[`${index}-${key}`]) {
-					return this.defaultImages.small;
-				}
-				const item = this.FeaturedGameList[index] || {};
-				const rawUrl = item[key] || '';
-				if (!rawUrl || rawUrl.trim() === '' || rawUrl.includes('undefined') || rawUrl.includes('null')) {
-					return this.defaultImages.small;
-				}
-				return rawUrl;
-			},
-			setErrorImg(index, key) {
-				this.errorImgMap[`${index}-${key}`] = true;
-				this.$forceUpdate();
-				console.warn(`图片加载失败，已替换为默认图: 索引${index}-${key} -> ${this.defaultImages.small}`);
-			},
-			handleHeaderImgError() {
-				this.headerImgSrc = this.defaultImages.default;
-				console.warn('头部标题图片加载失败，已替换为默认图');
 			}
 		},
 	};
@@ -192,7 +162,6 @@
 		max-width: 1400px;
 		margin: 1rem auto;
 		padding: 1rem 1.5rem 2.5rem;
-		background-color: #ffffff;
 		overflow: hidden;
 	}
 
@@ -240,23 +209,25 @@
 		cursor: not-allowed;
 	}
 
-	/* 核心修复：卡片容器 - 改用grid布局，彻底解决尺寸不一致 */
+	/* 卡片容器 - grid布局 */
 	.card-container {
 		display: grid;
 		/* 自动适配列数，固定列宽，间距1.5rem */
 		grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
 		gap: 1.5rem;
-		justify-items: center; /* 卡片水平居中 */
+		justify-items: center;
+		/* 卡片水平居中 */
 		padding: 0.5rem 0;
 	}
 
 	/* 卡片样式 - 完全固定尺寸，移除弹性拉伸 */
 	.card-item {
-		width: 8rem; /* 固定宽度，彻底解决拉伸问题 */
+		width: 8rem;
+		/* 固定宽度，彻底解决拉伸问题 */
 		text-align: center;
 		border-radius: 1rem;
 		overflow: hidden;
-		background-color: #fafafa;
+		background-color: #000;
 		box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
 		transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		cursor: pointer;
@@ -272,9 +243,10 @@
 	/* 图片容器 - 固定尺寸 */
 	.card-img-wrapper {
 		width: 100%;
-		height: 8rem; /* 图片区域固定高度 */
+		height: 10rem;
+		/* 补充固定高度，避免图片容器高度塌陷 */
 		overflow: hidden;
-		background-color: #f0f0f0;
+		background-color: #000;
 	}
 
 	.card-img {
@@ -290,39 +262,80 @@
 
 	/* 卡片标题 */
 	.card-title {
-		color: #333333;
-		background: linear-gradient(to bottom, #f8f8f8, #f0f0f0);
-		padding: 0.6rem 0.5rem;
+		color: #fff;
+		background-color: #000;
+		padding: 0.3rem 0.25rem;
 		font-size: 0.75rem;
 		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
 		margin: 0;
 		white-space: nowrap;
+		/* 强制文字单行显示 */
 		overflow: hidden;
+		/* 隐藏超出部分 */
 		text-overflow: ellipsis;
-		height: 3rem; /* 标题区域固定高度，和图片区凑满卡片高度 */
+		/* 超出显示省略号 */
+		/* 优化居中+确保截断生效 */
+		display: block;
+		/* 改为block，避免flex影响截断（关键！） */
+		text-align: center;
+		/* 文字水平居中（替代flex居中） */
+		line-height: 1.2;
+		/* 行高适配，避免文字垂直偏移 */
+		max-width: 100%;
+		/* 限制最大宽度为父容器 */
+	}
+	
+	
+
+	/* 加载更多按钮 - 调整为弹性布局，让文字和箭头对齐 */
+	.load-more-btn {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-	}
-
-	/* 加载更多按钮 */
-	.load-more-btn {
-		display: block;
-		margin: 2rem auto 0.5rem;
-		padding: 0.75rem 2.5rem;
+		/* gap: 0.5rem; */
+		/* 文字和箭头的间距 */
+		/* 保留原按钮样式（背景、圆角等） */
+		/* margin: 2rem auto 0.5rem; */
+		padding: 0.25rem 1rem;
 		background: linear-gradient(to right, #42b983, #359469);
 		color: white;
 		border: none;
 		border-radius: 2rem;
 		cursor: pointer;
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		font-weight: 500;
 		transition: all 0.3s ease;
 		box-shadow: 0 0.25rem 0.75rem rgba(66, 185, 131, 0.2);
 		position: relative;
 		overflow: hidden;
+		flex-direction: column;
+		line-height: 2;
+	}
+
+	/* 向下箭头样式（用CSS伪元素实现）*/
+	.arrow-icon {
+		width: 0;
+		height: 0;
+		border-left: 0.5rem solid transparent;
+		border-right: 0.5rem solid transparent;
+		border-top: 0.5rem solid white;
+		/* 倒三角实现向下箭头 */
+		transition: transform 0.2s ease;
+	}
+
+	/* 鼠标悬浮时箭头轻微下移，增强交互感 */
+	.load-more-btn:not(:disabled):hover .arrow-icon {
+		transform: translateY(1px);
+	}
+
+	/* 禁用状态下的按钮样式（保留）*/
+	.load-more-btn:disabled {
+		background: linear-gradient(to right, #cccccc, #b3b3b3);
+		cursor: not-allowed;
+		opacity: 0.8;
+		transform: none;
+		box-shadow: none;
 	}
 
 	.load-more-btn:not(:disabled):hover {
@@ -336,13 +349,7 @@
 		box-shadow: 0 0.15rem 0.5rem rgba(66, 185, 131, 0.2);
 	}
 
-	.load-more-btn:disabled {
-		background: linear-gradient(to right, #cccccc, #b3b3b3);
-		cursor: not-allowed;
-		opacity: 0.8;
-		transform: none;
-		box-shadow: none;
-	}
+
 
 	/* 响应式适配 */
 	@media (max-width: 768px) {
@@ -358,21 +365,14 @@
 
 		.card-item {
 			width: 7rem;
-			height: 10rem;
 		}
 
 		.card-img-wrapper {
-			height: 7rem;
+			height: 9rem;
 		}
 
 		.card-title {
-			height: 3rem;
 			font-size: 0.7rem;
-		}
-
-		.load-more-btn {
-			padding: 0.65rem 2rem;
-			font-size: 0.85rem;
 		}
 	}
 
@@ -383,15 +383,13 @@
 
 		.card-item {
 			width: 6rem;
-			height: 9rem;
 		}
 
 		.card-img-wrapper {
-			height: 6rem;
+			height: 8.5rem;
 		}
 
 		.card-title {
-			height: 3rem;
 			font-size: 0.65rem;
 		}
 
@@ -403,146 +401,5 @@
 		.bi-chevron-lowDark {
 			font-size: 1rem;
 		}
-	}
-
-	/* 保留原有未使用样式，避免功能异常 */
-	.game-swiper {
-		height: 18rem;
-	}
-
-	.game-swiper /deep/ .uni-swiper-slides {
-		inset: 0 1rem !important;
-	}
-
-	.game-swiper ::v-deep .uni-swiper-slides {
-		inset: 0 1rem !important;
-	}
-
-	.swiper-item {
-		display: flex !important;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.game-item-wrapper {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		padding: 0.5rem 0;
-	}
-
-	.game-item {
-		width: 90%;
-		background: #fff;
-		transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-		opacity: 0.7;
-		cursor: pointer;
-		overflow: hidden;
-		max-width: 20rem;
-		border-radius: 1rem;
-	}
-
-	.game-item.active {
-		transform: scale(1.03);
-		opacity: 1;
-	}
-
-	.category-container {
-		padding: 1rem;
-		display: flex;
-		gap: 0.5rem;
-		height: 15rem;
-		box-sizing: border-box;
-		background-color: #382912;
-	}
-
-	.left-container,
-	.right-container {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		gap: 0.8rem;
-		min-height: 0;
-	}
-
-	.left-top-card {
-		flex: 2;
-		background-color: #895c07;
-		color: #fff;
-		padding: 0.8rem;
-		border-radius: 0.8rem;
-		display: flex;
-		flex-direction: column;
-		cursor: pointer;
-		transition: transform 0.2s ease;
-		min-height: 0;
-	}
-
-	.left-top-card:hover {
-		transform: scale(1.02);
-	}
-
-	.left-bottom-cards,
-	.right-top-cards {
-		flex: 1;
-		display: flex;
-		gap: 0.8rem;
-		min-height: 0;
-		justify-content: space-evenly;
-	}
-
-	.right-bottom-card {
-		flex: 1;
-		border-radius: 0.8rem;
-		overflow: hidden;
-		cursor: pointer;
-		transition: transform 0.2s ease;
-		position: relative;
-		min-height: 0;
-	}
-
-	.right-bottom-card:hover {
-		transform: scale(1.02);
-	}
-
-	.small-card,
-	.right-bottom-card {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		min-width: 0;
-		min-height: 0;
-	}
-
-	.small-card:hover {
-		transform: scale(1.02);
-	}
-
-	.small-card-img,
-	.big-card-img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-		border-radius: 0.8rem;
-	}
-
-	.large-card-icon {
-		width: 1rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.large-card-title {
-		font-size: 0.8rem;
-		font-weight: 700;
-		margin-bottom: 0.3rem;
-	}
-
-	.large-card-desc {
-		font-size: 0.6rem;
-		opacity: 0.9;
-		line-height: 1.4;
 	}
 </style>

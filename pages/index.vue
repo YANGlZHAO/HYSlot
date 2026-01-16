@@ -21,9 +21,9 @@
 		</div>
 		<div class="page-content" :style="{ marginTop: bannerHeight + 'px' }">
 			<TopNavBar v-model="activeIndex" :list="navList" @change="onNavChange" />
-			<HotGame :gameList="hotGames" />
-			<HottestCategory :HottestCategoryList="HottestCategoryList"/>
-			<FeaturedGame :FeaturedGameList="FeaturedGameList"></FeaturedGame>
+			<HotGame :gameList="hotGames"></HotGame>
+			<HottestCategory></HottestCategory>
+			<FeaturedGame></FeaturedGame>
 			<footer class="footer">
 				<div class="footer-cols">
 					<div class="col">
@@ -216,68 +216,6 @@
 						icon: 'https://public.pg-demo.com/pages/static/image/en/Small_Icon/54/app_icon_small@3x-9930716d.png',
 						name: 'Wild Bandito',
 						desc: 'Águila which means "The Eagle" is a...'
-					}
-				],
-				HottestCategoryList: [{
-						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
-						title: "Music",
-						desc: "Music makes everything better, and these games will grove to it!",
-						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
-					},{
-						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
-						title: "Music",
-						desc: "Music makes everything better, and these games will grove to it!",
-						image1: "https://public.pg-demo.com/pages/static/image/n/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
-					},{
-						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
-						title: "Music",
-						desc: "Music makes everything better, and these games will grove to it!",
-						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						bigImg: "https://www.pgsoft.com/_nuxt/ig/3D_Poker_en.07427ad.png"
-					},{
-						icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
-						title: "Music",
-						desc: "Music makes everything better, and these games will grove to it!",
-						image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
-						bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
-					},
-				],
-				FeaturedGameList: [{
-						img: '/static/icons/1.png',
-						name: 'FOUTURE MOUSE'
-					},
-					{
-						img: '/static/icons/4.png',
-						name: 'DROGON KING FISHING'
-					},
-					{
-						img: '/static/icons/3.png',
-						name: 'ANIMAL PARTY'
-					},{
-						img: '/static/icons/4.png',
-						name: 'FOUTURE MOUSE'
-					},
-					{
-						img: '/static/icons/5.png',
-						name: 'DROGON KING FISHING'
-					},
-					{
-						img: '/static/icons/6.png',
-						name: 'ANIMAL PARTY'
 					}
 				],
 			}

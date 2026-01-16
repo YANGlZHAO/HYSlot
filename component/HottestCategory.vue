@@ -1,7 +1,9 @@
 <template>
 	<div class="game-swiper-container">
 		<div class="header-inner">
-			<img :src="headerImgSrc" class="text_Img_Hottest_Category" @error="handleHeaderImgError" />
+			<!-- 头部图片错误处理：调用mixin的方法 -->
+			<img :src="headerImgSrc" class="text_Img_Hottest_Category"
+				@error="handleHeaderImageError('headerImgSrc', 'default')" />
 			<view v-if="HottestCategoryList.length > 1" class="bi-chevron">
 				<i class="bi bi-chevron-left"
 					:class="currentIndex !== 0 ? 'bi-chevron-Highlight' : 'bi-chevron-lowDark'"></i>
@@ -18,20 +20,20 @@
 						<div class="category-container">
 							<div class="left-container">
 								<div class="left-top-card" @click="handleCardClick('large')">
-									<img class="large-card-icon" :src="getImgUrl(index, 'icon', 'default')"
-										@error="() => setErrorImg(index, 'icon')"></img>
+									<!-- 普通图片错误处理：传数组、索引、key、默认图类型 -->
+									<img class="large-card-icon" :src="item.icon"
+										@error="handleImageError(HottestCategoryList, index, 'icon', 'default')"></img>
 									<div class="large-card-title">{{ item.title }}</div>
 									<div class="large-card-desc">{{ item.desc }}</div>
 								</div>
 								<div class="left-bottom-cards">
 									<div class="small-card" @click="handleCardClick('small3')">
-										<!-- 图片：状态驱动 + 错误处理 -->
-										<img :src="getImgUrl(index, 'image1', 'small')" class="small-card-img"
-											@error="() => setErrorImg(index, 'image1')" />
+										<img :src="item.image1" class="small-card-img"
+											@error="handleImageError(HottestCategoryList, index, 'image1', 'small')" />
 									</div>
 									<div class="small-card" @click="handleCardClick('small4')">
-										<img :src="getImgUrl(index, 'image2', 'small')" class="small-card-img"
-											@error="() => setErrorImg(index, 'image2')" />
+										<img :src="item.image2" class="small-card-img"
+											@error="handleImageError(HottestCategoryList, index, 'image2', 'small')" />
 									</div>
 								</div>
 							</div>
@@ -39,17 +41,17 @@
 							<div class="right-container">
 								<div class="right-top-cards">
 									<div class="small-card" @click="handleCardClick('small3')">
-										<img :src="getImgUrl(index, 'image3', 'small')" class="small-card-img"
-											@error="() => setErrorImg(index, 'image3')" />
+										<img :src="item.image3" class="small-card-img"
+											@error="handleImageError(HottestCategoryList, index, 'image3', 'small')" />
 									</div>
 									<div class="small-card" @click="handleCardClick('small4')">
-										<img :src="getImgUrl(index, 'image4', 'small')" class="small-card-img"
-											@error="() => setErrorImg(index, 'image4')" />
+										<img :src="item.image4" class="small-card-img"
+											@error="handleImageError(HottestCategoryList, index, 'image4', 'small')" />
 									</div>
 								</div>
 								<div class="right-bottom-card" @click="handleCardClick('small4')">
-									<img :src="getImgUrl(index, 'bigImg', 'big')" class="big-card-img"
-										@error="() => setErrorImg(index, 'bigImg')" />
+									<img :src="item.bigImg" class="big-card-img"
+										@error="handleImageError(HottestCategoryList, index, 'bigImg', 'big')" />
 								</div>
 							</div>
 						</div>
@@ -61,32 +63,65 @@
 </template>
 
 <script>
+
 	export default {
-		props: {
-			HottestCategoryList: {
-				type: Array,
-				required: true,
-			},
-		},
 		data() {
 			return {
+				HottestCategoryList: [{
+					icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+					title: "Music",
+					desc: "Music makes everything better, and these games will grove to it!",
+					image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+				}, {
+					icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+					title: "Music",
+					desc: "Music makes everything better, and these games will grove to it!",
+					image1: "https://public.pg-demo.com/pages/static/image/n/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+				}, {
+					icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+					title: "Music",
+					desc: "Music makes everything better, and these games will grove to it!",
+					image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					bigImg: "https://www.pgsoft.com/_nuxt/ig/3D_Poker_en.07427ad.png"
+				}, {
+					icon: "https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg",
+					title: "Music",
+					desc: "Music makes everything better, and these games will grove to it!",
+					image1: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image2: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image3: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					image4: "https://public.pg-demo.com/pages/static/image/en/Small_Icon/31/app_icon_small@3x-2100b24d.png",
+					bigImg: "https://www.pgsoft.com/_nuxt/img/3D_Poker_en.07427ad.png"
+				}],
 				currentIndex: 0,
-				// 定义默认占位图地址
-				defaultImages: {
-					default: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png', // 通用默认图
-					small: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png', // 小图默认占位
-					big: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png' // 大图默认占位
-				},
 				// 头部图片初始地址
-				headerImgSrc: '/static/textImg_Hottest_Category.png',
-				// 记录每个图片的错误状态（格式：{ "索引-图片key": true }）
-				errorImgMap: {},
-				// 图片状态：loading | loaded | error
-		imgStatusMap: {} // { "0-icon": "loaded" }
-		
+				headerImgSrc: '/static/textImg_Hottest_Category.png'
+				// 默认图配置已在mixin中定义，如需自定义可在这里覆盖
+				// defaultImages: { ... } 
 			};
 		},
-		mounted() {},
+		mounted() {
+			// 可选：初始化检查无效图片地址（比如初始值为空/null的图片）
+			this.initInvalidImages(this.HottestCategoryList, {
+				icon: 'default',
+				image1: 'small',
+				image2: 'small',
+				image3: 'small',
+				image4: 'small',
+				bigImg: 'big'
+			});
+		},
 		methods: {
 			// swiper切换事件
 			onSwiperChange(e) {
@@ -98,58 +133,8 @@
 			},
 			handleCardClick(cardType) {
 				this.$emit("card-click", cardType);
-			},
-
-			/**
-			 * 核心：获取图片地址（状态驱动）
-			 * @param {Number} index - swiper-item索引
-			 * @param {String} key - 图片字段名（icon/image1/image2等）
-			 * @param {String} type - 默认图类型（default/small/big）
-			 * @returns {String} 最终显示的图片地址
-			 */
-			getImgUrl(index, key, type) {
-				// 1. 如果标记为错误，直接返回默认图
-				if (this.errorImgMap[`${index}-${key}`]) {
-					return this.defaultImages[type];
-				}
-
-				// 2. 获取当前item
-				const item = this.HottestCategoryList[index] || {};
-
-				// 3. 读取对应字段的图片地址（包括icon）
-				const rawUrl = item[key] || '';
-
-				// 4. 空值/无效地址直接返回默认图
-				if (!rawUrl || rawUrl.trim() === '' || rawUrl.includes('undefined') || rawUrl.includes('null')) {
-					return this.defaultImages[type];
-				}
-
-				// 5. 有效地址返回原地址
-				return rawUrl;
-			},
-
-			/**
-			 * 标记图片错误并强制更新视图
-			 * @param {Number} index - swiper-item索引
-			 * @param {String} key - 图片字段名
-			 */
-			setErrorImg(index, key) {
-				// 标记该图片为错误状态
-				this.errorImgMap[`${index}-${key}`] = true;
-				// 强制更新视图（小程序关键：触发Vue重新渲染）
-				this.$forceUpdate();
-				// 打印日志（方便排查）
-				console.warn(`图片加载失败，已替换为默认图: 索引${index}-${key} -> ${this.defaultImages.small}`);
-			},
-
-			/**
-			 * 头部图片错误处理
-			 */
-			handleHeaderImgError() {
-				this.headerImgSrc = this.defaultImages.default;
-				console.warn('头部标题图片加载失败，已替换为默认图');
 			}
-		},
+		}
 	};
 </script>
 
@@ -244,7 +229,6 @@
 		flex-direction: column;
 		gap: 0.8rem;
 		min-height: 0;
-		/* ⭐ 非常关键，防止 flex 子项撑爆 */
 	}
 
 	.left-top-card {
@@ -264,8 +248,8 @@
 		transform: scale(1.02);
 	}
 
-	.left-bottom-cards, 
-	.right-top-cards{
+	.left-bottom-cards,
+	.right-top-cards {
 		flex: 1;
 		display: flex;
 		gap: 0.8rem;

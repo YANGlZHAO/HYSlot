@@ -21,7 +21,9 @@ Vue.prototype.$config = globalConfig
 
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-
+import errorImageHandler from '@/src/mixins/errorImageHandler.js';
+// 全局注册图片错误处理mixin
+Vue.mixin(errorImageHandler);
 
 // 获取刘海和底部横条高度
 const systemInfo = uni.getSystemInfoSync()

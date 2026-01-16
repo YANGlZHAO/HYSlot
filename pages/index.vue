@@ -24,40 +24,19 @@
 			<HotGame :gameList="hotGames"></HotGame>
 			<HottestCategory></HottestCategory>
 			<FeaturedGame></FeaturedGame>
-			<footer class="footer">
-				<div class="footer-cols">
-					<div class="col">
-						<h5>HY WEB MAP</h5>
-						<p>Home</p>
-						<p>Games</p>
-						<p>News</p>
-					</div>
-
-					<div class="col">
-						<h5>ABOUT US</h5>
-						<p>Licensing</p>
-						<p>Certification</p>
-						<p>Privacy Policy</p>
-					</div>
-
-					<div class="col">
-						<h5>EVENTS</h5>
-						<p>Exhibitions</p>
-					</div>
-				</div>
-			</footer>
+			<bottomFooter></bottomFooter>
 		</div>
 	</div>
 </template>
 
 <script>
-	import NavBarVue from '@/component/NavBar.vue'
 	import MyCarousel from "@/component/MyCarousel.vue"
 	import AnimatedDropdown from "@/component/AnimatedDropdown.vue"
 	import TopNavBar from "@/component/TopNavBar.vue"
-	import HotGame from '../component/HotGame.vue'
-	import HottestCategory from "../component/HottestCategory.vue"
-	import FeaturedGame from "../component/FeaturedGame.vue"
+	import HotGame from '@/component/HotGame.vue'
+	import HottestCategory from "@/component/HottestCategory.vue"
+	import FeaturedGame from "@/component/FeaturedGame.vue"
+	import bottomFooter from "@/pages/bottomFooter/bottomFooter.vue"
 	import {
 		getFcSwiperList,
 		getFcPGList,
@@ -72,13 +51,13 @@
 	export default {
 		name: 'Home',
 		components: {
-			NavBarVue,
 			MyCarousel,
 			AnimatedDropdown,
 			TopNavBar,
 			HotGame,
 			HottestCategory,
-			FeaturedGame
+			FeaturedGame,
+			bottomFooter
 		},
 		data() {
 			return {

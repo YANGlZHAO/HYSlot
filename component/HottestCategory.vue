@@ -1,7 +1,7 @@
 <template>
 	<div class="game-swiper-container">
 		<div class="header-inner">
-			<img src="/static/textImg_Hottest_Category.png" class="text_Img_Hottest_Category" />
+			<img :src="headerImgSrc" class="text_Img_Hottest_Category" @error="handleHeaderImgError" />
 			<view v-if="HottestCategoryList.length > 1" class="bi-chevron">
 				<i class="bi bi-chevron-left"
 					:class="currentIndex !== 0 ? 'bi-chevron-Highlight' : 'bi-chevron-lowDark'"></i>
@@ -18,33 +18,38 @@
 						<div class="category-container">
 							<div class="left-container">
 								<div class="left-top-card" @click="handleCardClick('large')">
-									<img class="large-card-icon"
-										src="https://www.pgsoft.com/_nuxt/img/Music_icon.87b8e70.svg"></img>
+									<img class="large-card-icon" :src="getImgUrl(index, 'icon', 'default')"
+										@error="() => setErrorImg(index, 'icon')"></img>
 									<div class="large-card-title">{{ item.title }}</div>
 									<div class="large-card-desc">{{ item.desc }}</div>
 								</div>
 								<div class="left-bottom-cards">
 									<div class="small-card" @click="handleCardClick('small3')">
-										<img :src="item.image3" class="small-card-img" />
+										<!-- 图片：状态驱动 + 错误处理 -->
+										<img :src="getImgUrl(index, 'image1', 'small')" class="small-card-img"
+											@error="() => setErrorImg(index, 'image1')" />
 									</div>
 									<div class="small-card" @click="handleCardClick('small4')">
-										<img :src="item.image4" class="small-card-img" />
+										<img :src="getImgUrl(index, 'image2', 'small')" class="small-card-img"
+											@error="() => setErrorImg(index, 'image2')" />
 									</div>
 								</div>
 							</div>
 
-							<div class="left-container">
-
-								<div class="left-bottom-cards">
+							<div class="right-container">
+								<div class="right-top-cards">
 									<div class="small-card" @click="handleCardClick('small3')">
-										<img :src="item.image3" class="small-card-img" />
+										<img :src="getImgUrl(index, 'image3', 'small')" class="small-card-img"
+											@error="() => setErrorImg(index, 'image3')" />
 									</div>
 									<div class="small-card" @click="handleCardClick('small4')">
-										<img :src="item.image4" class="small-card-img" />
+										<img :src="getImgUrl(index, 'image4', 'small')" class="small-card-img"
+											@error="() => setErrorImg(index, 'image4')" />
 									</div>
 								</div>
-								<div class="small-card" @click="handleCardClick('small4')">
-									<img :src="item.bigImg" class="big-card-img" />
+								<div class="right-bottom-card" @click="handleCardClick('small4')">
+									<img :src="getImgUrl(index, 'bigImg', 'big')" class="big-card-img"
+										@error="() => setErrorImg(index, 'bigImg')" />
 								</div>
 							</div>
 						</div>
@@ -66,20 +71,83 @@
 		data() {
 			return {
 				currentIndex: 0,
+				// 定义默认占位图地址
+				defaultImages: {
+					default: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png', // 通用默认图
+					small: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png', // 小图默认占位
+					big: 'https://www.pgsoft.com/_nuxt/img/error_icon.2a67ef6.png' // 大图默认占位
+				},
+				// 头部图片初始地址
+				headerImgSrc: '/static/textImg_Hottest_Category.png',
+				// 记录每个图片的错误状态（格式：{ "索引-图片key": true }）
+				errorImgMap: {},
+				// 图片状态：loading | loaded | error
+		imgStatusMap: {} // { "0-icon": "loaded" }
+		
 			};
 		},
-		mounted() {
-
-		},
+		mounted() {},
 		methods: {
+			// swiper切换事件
 			onSwiperChange(e) {
 				this.currentIndex = e.detail.current;
 			},
+			// 卡片点击事件
 			handleItemClick(item) {
 				this.$emit('item-click', item);
 			},
 			handleCardClick(cardType) {
 				this.$emit("card-click", cardType);
+			},
+
+			/**
+			 * 核心：获取图片地址（状态驱动）
+			 * @param {Number} index - swiper-item索引
+			 * @param {String} key - 图片字段名（icon/image1/image2等）
+			 * @param {String} type - 默认图类型（default/small/big）
+			 * @returns {String} 最终显示的图片地址
+			 */
+			getImgUrl(index, key, type) {
+				// 1. 如果标记为错误，直接返回默认图
+				if (this.errorImgMap[`${index}-${key}`]) {
+					return this.defaultImages[type];
+				}
+
+				// 2. 获取当前item
+				const item = this.HottestCategoryList[index] || {};
+
+				// 3. 读取对应字段的图片地址（包括icon）
+				const rawUrl = item[key] || '';
+
+				// 4. 空值/无效地址直接返回默认图
+				if (!rawUrl || rawUrl.trim() === '' || rawUrl.includes('undefined') || rawUrl.includes('null')) {
+					return this.defaultImages[type];
+				}
+
+				// 5. 有效地址返回原地址
+				return rawUrl;
+			},
+
+			/**
+			 * 标记图片错误并强制更新视图
+			 * @param {Number} index - swiper-item索引
+			 * @param {String} key - 图片字段名
+			 */
+			setErrorImg(index, key) {
+				// 标记该图片为错误状态
+				this.errorImgMap[`${index}-${key}`] = true;
+				// 强制更新视图（小程序关键：触发Vue重新渲染）
+				this.$forceUpdate();
+				// 打印日志（方便排查）
+				console.warn(`图片加载失败，已替换为默认图: 索引${index}-${key} -> ${this.defaultImages.small}`);
+			},
+
+			/**
+			 * 头部图片错误处理
+			 */
+			handleHeaderImgError() {
+				this.headerImgSrc = this.defaultImages.default;
+				console.warn('头部标题图片加载失败，已替换为默认图');
 			}
 		},
 	};
@@ -167,10 +235,7 @@
 		height: 15rem;
 		box-sizing: border-box;
 		background-color: #382912;
-		/* overflow: hidden; */
-		/* 最终兜底 */
 	}
-
 
 	.left-container,
 	.right-container {
@@ -182,8 +247,6 @@
 		/* ⭐ 非常关键，防止 flex 子项撑爆 */
 	}
 
-
-	/* 左侧上半部分文字卡片 */
 	.left-top-card {
 		flex: 2;
 		background-color: #895c07;
@@ -201,8 +264,8 @@
 		transform: scale(1.02);
 	}
 
-	/* 左侧下半部分两个小卡片容器 */
-	.left-bottom-cards {
+	.left-bottom-cards, 
+	.right-top-cards{
 		flex: 1;
 		display: flex;
 		gap: 0.8rem;
@@ -210,22 +273,16 @@
 		justify-content: space-evenly;
 	}
 
-	/* 右侧上半部分两个小卡片容器 */
-	.right-top-cards {
-		flex: 1;
-		display: flex;
-		gap: 0.8rem;
-		min-height: 0;
-	}
-
-	/* 右侧下半部分大图片卡片 */
 	.right-bottom-card {
-		flex: 1;
-		border-radius: 0.8rem;
 		overflow: hidden;
+		flex: 2;
+		background-color: #895c07;
+		color: #fff;
+		border-radius: 0.8rem;
+		display: flex;
+		flex-direction: column;
 		cursor: pointer;
 		transition: transform 0.2s ease;
-		position: relative;
 		min-height: 0;
 	}
 
